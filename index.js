@@ -13,6 +13,7 @@ mongoose.connect(process.env.DB_URL)
   .catch((err) => console.log(err));
 
 app.use(express.json());
+app.use(express.urlencoded({extended: true}));
 app.use('/user', userRouter);
 app.use('/auth', authRouter);
 

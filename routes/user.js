@@ -2,7 +2,7 @@ const router = require('express').Router();
 const {verifToken, verifTokenAndAuthorization} = require('./verifyToken');
 
 // 수정
-router.put('/:id', verifTokenAndAuthorization, async (req, res) => {
+router.patch('/:id', verifTokenAndAuthorization, async (req, res) => {
   if(req.body.password) {
     req.body.password = CryptoJS.AES.encrypt(
       req.body.password, 
