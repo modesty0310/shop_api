@@ -17,6 +17,10 @@ app.use(express.urlencoded({extended: true}));
 app.use('/user', userRouter);
 app.use('/auth', authRouter);
 
+app.use(function(err, req, res, next) {
+  console.error(err.stack);
+  res.status(500).send('error');
+});
 
 app.listen(process.env.PORT || 5000, () => {
   console.log("Started Server");
