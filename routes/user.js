@@ -1,5 +1,6 @@
 const router = require('express').Router();
-const {verifToken, verifTokenAndAuthorization} = require('./verifyToken');
+const User = require('../models/User');
+const {verifToken, verifTokenAndAuthorization, verifTokenAndAdmin} = require('./verifyToken');
 
 // 수정
 router.patch('/:id', verifTokenAndAuthorization, async (req, res) => {
@@ -9,8 +10,8 @@ router.patch('/:id', verifTokenAndAuthorization, async (req, res) => {
       process.env.PASS_SEC
       ).toString();
   };
-
   try {
+    console.log(req.body);
     const uqdateUser = await User.findByIdAndUpdate(
       req.params.id, 
       {
@@ -35,11 +36,22 @@ router.delete("/:id", verifTokenAndAuthorization, async(req, res) => {
 });
 
 // 유저 가져오기
-router.get('/:id', verifTokenAndAuthorization, async(req, res) => {
+router.get('/find/:id', verifTokenAndAuthorization, async(req, res) => {
   try {
     const user = await User.findById(req.params.id)
     const { password, ...others } = user._doc;
     res.status(200).json(others);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// 모든(관리자) 유저 가져오기
+router.get('/', verifTokenAndAdmin, async(req, res) => {
+  console.log(111);
+  try {
+    const users = await User.find();
+    res.status(200).json(users);
   } catch (err) {
     res.status(500).json(err);
   }
