@@ -38,7 +38,8 @@ router.delete("/:id", verifTokenAndAuthorization, async(req, res) => {
 router.get('/:id', verifTokenAndAuthorization, async(req, res) => {
   try {
     const user = await User.findById(req.params.id)
-    res.status(200).json(user)
+    const { password, ...others } = user._doc;
+    res.status(200).json(others);
   } catch (err) {
     res.status(500).json(err);
   }
