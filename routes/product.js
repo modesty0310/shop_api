@@ -31,5 +31,14 @@ router.patch('/:id', verifTokenAndAdmin, async (req, res) => {
   }
 });
 
+// 삭제
+router.delete("/:id", verifTokenAndAdmin, async(req, res) => {
+  try {
+    await Product.findByIdAndDelete(req.params.id)
+    res.status(200).json('상품을 삭제하였습니다.')
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
 
 module.exports = router;
