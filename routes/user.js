@@ -12,14 +12,14 @@ router.patch('/:id', verifTokenAndAuthorization, async (req, res) => {
   };
   try {
     console.log(req.body);
-    const uqdateUser = await User.findByIdAndUpdate(
+    const uqdatedUser = await User.findByIdAndUpdate(
       req.params.id, 
       {
         $set: req.body
       }, 
         {new:true}
     );
-    res.status(200).json(uqdateUser);
+    res.status(200).json(uqdatedUser);
   } catch (err) {
     res.status(500).json(err);
   }
