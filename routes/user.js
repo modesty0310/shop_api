@@ -48,9 +48,9 @@ router.get('/find/:id', verifTokenAndAuthorization, async(req, res) => {
 
 // 모든(관리자) 유저 가져오기
 router.get('/', verifTokenAndAdmin, async(req, res) => {
-  console.log(111);
+  const query = req.query.new;
   try {
-    const users = await User.find();
+    const users = query ? await User.find().sort({_id:-1}).limit(1) : await User.find();
     res.status(200).json(users);
   } catch (err) {
     res.status(500).json(err);
