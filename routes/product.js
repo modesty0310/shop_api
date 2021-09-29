@@ -1,9 +1,9 @@
 const router = require('express').Router();
 const Product = require('../models/Product');
-const {verifToken, verifTokenAndAuthorization, verifTokenAndAdmin} = require('./verifyToken');
+const {verifToken, verifyTokenAndAuthorization, verifyTokenAndAdmin} = require('./verifyToken');
 
 // 생성
-router.post('/', verifTokenAndAdmin, async (req, res) => {
+router.post('/', verifyTokenAndAdmin, async (req, res) => {
   const newProduct = new Product(req.body);
   try {
     const savedProduct = await newProduct.save();
@@ -14,7 +14,7 @@ router.post('/', verifTokenAndAdmin, async (req, res) => {
 });
 
 // 수정
-router.patch('/:id', verifTokenAndAdmin, async (req, res) => {
+router.patch('/:id', verifyTokenAndAdmin, async (req, res) => {
   try {
     const uqdatedProduct = await Product.findByIdAndUpdate(
       req.params.id, 
@@ -30,7 +30,7 @@ router.patch('/:id', verifTokenAndAdmin, async (req, res) => {
 });
 
 // 삭제
-router.delete("/:id", verifTokenAndAdmin, async(req, res) => {
+router.delete("/:id", verifyTokenAndAdmin, async(req, res) => {
   try {
     await Product.findByIdAndDelete(req.params.id)
     res.status(200).json('상품을 삭제하였습니다.')
@@ -40,7 +40,7 @@ router.delete("/:id", verifTokenAndAdmin, async(req, res) => {
 });
 
 // 상품 가져오기
-router.get('/find/:id', verifTokenAndAdmin, async(req, res) => {
+router.get('/find/:id', verifyTokenAndAdmin, async(req, res) => {
   try {
     const product = await Product.findById(req.params.id)
     res.status(200).json(product);

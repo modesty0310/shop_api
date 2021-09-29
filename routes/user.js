@@ -1,9 +1,9 @@
 const router = require('express').Router();
 const User = require('../models/User');
-const {verifToken, verifTokenAndAuthorization, verifTokenAndAdmin} = require('./verifyToken');
+const {verifToken, verifyTokenAndAuthorization, verifyTokenAndAdmin} = require('./verifyToken');
 
 // 수정
-router.patch('/:id', verifTokenAndAuthorization, async (req, res) => {
+router.patch('/:id', verifyTokenAndAuthorization, async (req, res) => {
   if(req.body.password) {
     req.body.password = CryptoJS.AES.encrypt(
       req.body.password, 
@@ -26,7 +26,7 @@ router.patch('/:id', verifTokenAndAuthorization, async (req, res) => {
 });
 
 // 삭제
-router.delete("/:id", verifTokenAndAuthorization, async(req, res) => {
+router.delete("/:id", verifyTokenAndAuthorization, async(req, res) => {
   try {
     await User.findByIdAndDelete(req.params.id)
     res.status(200).json('아이디를 삭제하였습니다.')
@@ -36,7 +36,7 @@ router.delete("/:id", verifTokenAndAuthorization, async(req, res) => {
 });
 
 // 유저 가져오기
-router.get('/find/:id', verifTokenAndAuthorization, async(req, res) => {
+router.get('/find/:id', verifyTokenAndAuthorization, async(req, res) => {
   try {
     const user = await User.findById(req.params.id)
     const { password, ...others } = user._doc;
@@ -47,7 +47,7 @@ router.get('/find/:id', verifTokenAndAuthorization, async(req, res) => {
 });
 
 // 모든(관리자) 유저 가져오기
-router.get('/', verifTokenAndAdmin, async(req, res) => {
+router.get('/', verifyTokenAndAdmin, async(req, res) => {
   const query = req.query.new;
   try {
     const users = query ? await User.find().sort({_id:-1}).limit(1) : await User.find();
@@ -58,7 +58,7 @@ router.get('/', verifTokenAndAdmin, async(req, res) => {
 });
 
 // 사용자 상태 가져오기
-router.get('/stats', verifTokenAndAdmin, async (req, res) => {
+router.get('/stats', verifyTokenAndAdmin, async (req, res) => {
   const date = new Date();
   const lastYear = new Date(date.setUTCFullYear(date.getFullYear() - 1));
   try {
