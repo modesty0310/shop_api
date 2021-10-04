@@ -63,6 +63,8 @@ router.get('/stats', verifyTokenAndAdmin, async (req, res) => {
   const lastYear = new Date(date.setUTCFullYear(date.getFullYear() - 1));
   try {
     const data = await User.aggregate([
+      // $match 조건에 만족해야 다음 파이프라인 단계로 전달
+      // $gte : value 값보나 크거나 같은 값만 전달
       {$match: {createdAt : {$gte: lastYear}}},
       {
         $project: {
